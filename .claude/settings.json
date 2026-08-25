@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); case \" $cmd\" in *\" gh \"*|*\" gh\") acct=$(grep -E '^[[:space:]]+user:' \"$HOME/.config/gh/hosts.yml\" 2>/dev/null | tail -1 | awk '{print $2}'); [ \"$acct\" = \"Palissp\" ] || { echo \"BLOQUEADO: la cuenta gh activa es '${acct:-desconocida}', este repo es personal (Palissp). Ejecuta: gh auth switch --user Palissp\" >&2; exit 2; };; esac; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
