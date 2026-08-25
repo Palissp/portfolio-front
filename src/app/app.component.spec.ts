@@ -13,11 +13,11 @@ describe('AppComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render the hero name', () => {
+  it('should render the name in the header', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.hero-title')?.textContent).toContain('Marco Perez');
+    expect(compiled.querySelector('.logo')?.textContent).toContain('Marco Pérez');
   });
 
   it('should render every project card', () => {
