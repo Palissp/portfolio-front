@@ -1,59 +1,59 @@
-# PortfolioFront
+# portfolio-front
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+Personal portfolio of Marco Perez — a single-page Angular 20 site with GSAP scroll
+animations and Lenis smooth scrolling.
 
-## Development server
+**Live:** https://portfolio-front-486662929309.us-central1.run.app
 
-To start a local development server, run:
+## Requirements
 
-```bash
-ng serve
-```
+Node 24 (see `.nvmrc`). `nvm use` picks it up.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Development
 
 ```bash
-ng generate component component-name
+npm ci
+npm start          # http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Build & test
 
 ```bash
-ng generate --help
+npm run build      # production bundle → dist/portfolio-front/browser
+npm run test:ci    # Karma + Jasmine, headless, single run
+npm test           # same, in watch mode
 ```
 
-## Building
+## Docker
 
-To build the project run:
+The image is nginx serving the static bundle. This is exactly what gets deployed.
 
 ```bash
-ng build
+docker build -t portfolio-front .
+docker run --rm -p 8080:80 portfolio-front   # http://localhost:8080
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Deployment
 
-## Running unit tests
+Pushing to `main` deploys to production. Google Cloud Build watches the branch,
+builds this `Dockerfile`, and deploys the `portfolio-front` service on Cloud Run
+(project `portfolio-435305`, region `us-central1`). The build config lives in GCP,
+not in this repo.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+GitHub Actions (`.github/workflows/ci.yml`) runs tests, the production build and a
+`docker build` on every pull request — it does not deploy, it just stops a broken
+build from reaching `main`.
 
-```bash
-ng test
+## Project layout
+
+```
+src/
+├─ index.html            # title, meta description, OG tags, font <link>s
+├─ styles.scss           # design tokens on :root + global reset
+└─ app/
+   ├─ app.component.*    # the entire page: markup, styles, content, animations
+   ├─ app.config.ts
+   └─ app.routes.ts      # empty — navigation is anchor-based
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See [CLAUDE.md](./CLAUDE.md) for architecture notes and conventions.
