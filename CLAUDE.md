@@ -1,83 +1,96 @@
 # portfolio-front
 
-Proyecto **personal** de Marco: portfolio de una sola página (Angular 20, standalone,
-SCSS + GSAP/Lenis). Nada de este repo pertenece a un cliente ni a la cuenta de trabajo.
+Marco's **personal** project: a single-page portfolio (Angular 20, standalone,
+SCSS + GSAP/Lenis). Nothing in this repo belongs to a client or to the work account.
 
-## Comandos
+## Commands
 
-| Comando | Qué hace |
+| Command | What it does |
 |---|---|
-| `npm start` | Dev server en http://localhost:4200 |
-| `npm run build` | Build de producción a `dist/portfolio-front/browser` |
-| `npm test` | Karma + Jasmine en modo watch |
-| `npm run test:ci` | Karma headless, una corrida (lo que corre CI) |
-| `docker build -t portfolio-front .` | Misma imagen que despliega Cloud Build |
+| `npm start` | Dev server at http://localhost:4200 |
+| `npm run build` | Production build to `dist/portfolio-front/browser` |
+| `npm test` | Karma + Jasmine in watch mode |
+| `npm run test:ci` | Karma headless, single run (what CI runs) |
+| `docker build -t portfolio-front .` | The same image Cloud Build deploys |
 
-Node fijado en `.nvmrc` (24) y en `engines`. CI usa `node-version-file: .nvmrc`.
+Node is pinned in `.nvmrc` (24) and in `engines`. CI uses `node-version-file: .nvmrc`.
 
-## Arquitectura
+## Architecture
 
-Un único componente: `src/app/app.component.ts` — standalone, con todo el contenido
-del portfolio (`skills`, `projects`) hardcodeado como propiedades de clase.
+A single component: `src/app/app.component.ts` — standalone, with all the portfolio
+content (`skillGroups`, `projects`) hardcoded as class properties. The content is in
+English; clients are under NDA and are never named.
+`src/app/tech-icons.ts` holds the Simple Icons paths (CC0) rendered inline; if you add
+a new technology, add its entry there or the chip renders empty.
+`src/app/sector-icons.ts` holds hand-drawn stroke marks, one per industry, referenced
+from `project.sectorIcon`.
 
-- `src/styles.scss` — design system en CSS custom properties sobre `:root`
-  (paleta oscura, `--font-main: Inter`, `--font-display: Outfit`). Las fuentes se
-  cargan con `<link>` en `src/index.html`, **no** con `@import` (bloquea el render).
-- GSAP + ScrollTrigger y Lenis se inicializan en `ngAfterViewInit`, detrás de un
-  guard `isPlatformBrowser`. Las animaciones enganchan por clase CSS (`.reveal`,
-  `.hero-title`, `.hero-subtitle`) — si renombrás esas clases, se rompen en silencio.
-- `app.routes.ts` está vacío y no hay `<router-outlet>`: la navegación es por anchors
-  (`#about`, `#projects`, `#contact`). Si agregás rutas de verdad, hay que volver a
-  importar `RouterOutlet` en el componente.
-- Sin SSR, sin prerender, sin HttpClient, sin state management, sin i18n.
+- `src/styles.scss` — design system in CSS custom properties on `:root`: a light
+  editorial palette (`--paper`, `--ink`, `--signal`) and the IBM Plex superfamily
+  (`--font-main` Sans, `--font-mono` for eyebrows, dates and stage names). Fonts load
+  via `<link>` in `src/index.html`, **not** `@import` (which blocks rendering).
+  `--signal` is a state, not decoration: it marks "active" and links, nothing else.
+- GSAP + ScrollTrigger + SplitText and Lenis initialise in `ngAfterViewInit`, behind an
+  `isPlatformBrowser` guard **and** a `prefers-reduced-motion` check. Animations hook
+  onto CSS classes (`.reveal`, `.hero-title`, `.hero-lede`, `.hero-eyebrow`,
+  `.hero-actions`, `.stages`, `.diagram`) — renaming those classes breaks them
+  silently. All the premium GSAP plugins have been free since 3.13; they ship in
+  `node_modules/gsap`.
+- `app.routes.ts` is empty and there is no `<router-outlet>`: navigation is
+  anchor-based (`#about`, `#work`, `#contact`). If real routes ever get added,
+  `RouterOutlet` has to be imported back into the component.
+- No SSR, no prerender, no HttpClient, no state management, no i18n.
 
 ## CI/CD
 
-Son dos sistemas distintos y sólo uno despliega:
+Two separate systems, and only one of them deploys:
 
-1. **GitHub Actions** (`.github/workflows/ci.yml`) — corre en PRs y en push a `main`:
-   tests headless, build de producción y `docker build`. No despliega nada. Existe
-   para frenar un build roto **antes** de que llegue a `main`.
-2. **Google Cloud Build → Cloud Run** — configurado del lado de GCP, no hay
-   `cloudbuild.yaml` en el repo. Trigger sobre push a `main`, proyecto
-   `portfolio-435305`, región `us-central1`. Buildea el `Dockerfile` de la raíz,
-   pushea a `us-central1-docker.pkg.dev/portfolio-435305/cloud-run-source-deploy/portfolio-front`
-   y despliega el servicio Cloud Run `portfolio-front`.
+1. **GitHub Actions** (`.github/workflows/ci.yml`) — runs on PRs and on push to `main`:
+   headless tests, production build and `docker build`. It deploys nothing. It exists
+   to stop a broken build **before** it reaches `main`.
+2. **Google Cloud Build → Cloud Run** — configured on the GCP side; there is no
+   `cloudbuild.yaml` in the repo. Triggered by push to `main`, project
+   `portfolio-435305`, region `us-central1`. It builds the root `Dockerfile`, pushes to
+   `us-central1-docker.pkg.dev/portfolio-435305/cloud-run-source-deploy/portfolio-front`
+   and deploys the `portfolio-front` Cloud Run service. The public domain is
+   `https://itsmarco.dev/`, hardcoded in the `src/index.html` meta tags (`canonical`,
+   `og:url`, `og:image`) because crawlers need absolute URLs. If the domain changes,
+   those four lines have to change with it.
 
-Consecuencia práctica: **push a `main` = deploy a producción**. No hay staging.
+Practical consequence: **push to `main` = deploy to production**. There is no staging.
 
-`EXPOSE 80` en el Dockerfile no es decorativo: Cloud Run toma el puerto del
-contenedor de ahí. Si lo cambiás, hay que cambiar el puerto del servicio en GCP o
-el deploy queda sin responder.
+`EXPOSE 80` in the Dockerfile is not decorative: Cloud Run reads the container port
+from it. Changing it means changing the service port in GCP too, or the deploy stops
+responding.
 
-## Convenciones
+## Conventions
 
-- TypeScript en modo `strict` + `strictTemplates`. No aflojar esto para hacer pasar un build.
-- SCSS para estilos; nada de Tailwind ni librerías de componentes.
-- Los templates usan `*ngFor` con `CommonModule`. Si tocás uno, migralo a `@for`.
-- Sin ESLint ni Prettier configurados. `.editorconfig` manda: 2 espacios, comillas simples.
+- TypeScript in `strict` + `strictTemplates` mode. Do not loosen this to make a build pass.
+- SCSS for styles; no Tailwind, no component libraries.
+- Templates use native control flow (`@for`). `CommonModule` is no longer imported.
+- No ESLint, no Prettier. `.editorconfig` rules: 2 spaces, single quotes.
+- Everything committed to this repo is written in English — code, comments and docs.
 
-## Cuenta e identidad (no cambiar)
+## Account and identity (do not change)
 
-- Remote: `https://github.com/Palissp/portfolio-front.git` — cuenta personal **Palissp**.
-- Identidad de commits fijada en `.git/config` (local, gana sobre el global):
+- Remote: `https://github.com/Palissp/portfolio-front.git` — personal account **Palissp**.
+- Commit identity pinned in `.git/config` (local, wins over the global one):
   `user.name = Palissp` / `user.email = marco.perezj96@gmail.com`.
-- Credencial de push fijada a `Palissp` (`credential.https://github.com.username`).
-- La cuenta activa de `gh` debe ser `Palissp`. Si no lo es: `gh auth switch --user Palissp`.
-  Un hook en `.claude/settings.json` bloquea cualquier comando `gh` si la cuenta activa es otra.
-- **Nunca** usar la cuenta `marcoperez-twiins` ni ninguna cuenta de trabajo en este repo.
+- Push credential pinned to `Palissp` (`credential.https://github.com.username`).
+- The active `gh` account must be `Palissp`. If it is not: `gh auth switch --user Palissp`.
+  A hook in `.claude/settings.json` blocks any `gh` command when another account is active.
+- **Never** use the `marcoperez-twiins` account, or any work account, in this repo.
 
-## Reglas de trabajo
+## Working rules
 
-- No usar la skill `twiins-pr` acá: es específica de TwiinsHRM (formato de commits,
-  PRs cruzados BE/FE, etc.). Los PRs de este repo se hacen a mano con `gh pr create`.
-- No hacer `git commit` ni `git push` sin aprobación explícita del usuario.
+- Do not use the `twiins-pr` skill here: it is specific to TwiinsHRM (commit format,
+  cross-linked BE/FE PRs, and so on). PRs in this repo are created by hand with
+  `gh pr create`.
+- Never `git commit` or `git push` without explicit approval from the user.
 
-## Deuda conocida
+## Known debt
 
-- Contenido placeholder: los 3 proyectos son inventados y las imágenes son hotlinks a
-  Unsplash. El footer dice "© 2024". El mail de contacto es `hello@marcoperez.dev`.
-- `AppComponent` no tiene `ngOnDestroy`: Lenis y los ScrollTrigger nunca se destruyen.
-  Irrelevante hoy (el componente vive lo que vive la página), importa si aparecen rutas.
-- Sin `prefers-reduced-motion` alrededor de las animaciones.
-- Sin ESLint. Sin e2e.
+- `AppComponent` has no `ngOnDestroy`: Lenis and the ScrollTriggers are never destroyed.
+  Irrelevant today (the component lives as long as the page does); it matters the moment
+  routes appear.
+- No ESLint. No e2e.
