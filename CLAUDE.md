@@ -59,7 +59,17 @@ Two separate systems, and only one of them deploys:
    `og:url`, `og:image`) because crawlers need absolute URLs. If the domain changes,
    those four lines have to change with it.
 
-Practical consequence: **push to `main` = deploy to production**. There is no staging.
+**Branch protection** — a repository ruleset named `main` (id `21531057`) guards the
+default branch. It lives on the GitHub side, not in the repo: no deletion, no
+force-push, a PR is required (0 approvals) and the CI job `build` has to pass. There
+are no bypass actors, so it applies to the repo owner too. The required check is the
+job id in `ci.yml`; renaming that job orphans the check and blocks every merge, so the
+ruleset has to change with it:
+`gh api repos/Palissp/portfolio-front/rulesets/21531057 -X PUT --input <file>`.
+
+Practical consequence: **`git push origin main` is rejected**. Every change goes
+branch → push → `gh pr create` → CI green → `gh pr merge`, and **merging to `main` is
+what deploys to production**. There is no staging.
 
 ## Monitoring
 
@@ -115,7 +125,7 @@ responding.
 
 - Do not use the `twiins-pr` skill here: it is specific to TwiinsHRM (commit format,
   cross-linked BE/FE PRs, and so on). PRs in this repo are created by hand with
-  `gh pr create`.
+  `gh pr create`. They are not optional: the ruleset on `main` refuses direct pushes.
 - Never `git commit` or `git push` without explicit approval from the user.
 
 ## Known debt
