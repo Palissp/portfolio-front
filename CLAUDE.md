@@ -5,13 +5,15 @@ SCSS + GSAP/Lenis). Nothing in this repo belongs to a client or to the work acco
 
 ## Commands
 
-| Command | What it does |
-|---|---|
-| `npm start` | Dev server at http://localhost:4200 |
-| `npm run build` | Production build to `dist/portfolio-front/browser` |
-| `npm test` | Karma + Jasmine in watch mode |
-| `npm run test:ci` | Karma headless, single run (what CI runs) |
-| `docker build -t portfolio-front .` | The same image Cloud Build deploys |
+| Command                             | What it does                                       |
+| ----------------------------------- | -------------------------------------------------- |
+| `npm start`                         | Dev server at http://localhost:4200                |
+| `npm run build`                     | Production build to `dist/portfolio-front/browser` |
+| `npm test`                          | Karma + Jasmine in watch mode                      |
+| `npm run test:ci`                   | Karma headless, single run (what CI runs)          |
+| `npm run lint`                      | ESLint over `src/**/*.ts` and `src/**/*.html`      |
+| `npm run format`                    | Prettier over the whole repo                       |
+| `docker build -t portfolio-front .` | The same image Cloud Build deploys                 |
 
 Node is pinned in `.nvmrc` (24) and in `engines`. CI uses `node-version-file: .nvmrc`.
 
@@ -46,7 +48,7 @@ from `project.sectorIcon`.
 Two separate systems, and only one of them deploys:
 
 1. **GitHub Actions** (`.github/workflows/ci.yml`) — runs on PRs and on push to `main`:
-   headless tests, production build and `docker build`. It deploys nothing. It exists
+   lint, headless tests, production build and `docker build`. It deploys nothing. It exists
    to stop a broken build **before** it reaches `main`.
 2. **Google Cloud Build → Cloud Run** — configured on the GCP side; there is no
    `cloudbuild.yaml` in the repo. Triggered by push to `main`, project
@@ -68,7 +70,9 @@ responding.
 - TypeScript in `strict` + `strictTemplates` mode. Do not loosen this to make a build pass.
 - SCSS for styles; no Tailwind, no component libraries.
 - Templates use native control flow (`@for`). `CommonModule` is no longer imported.
-- No ESLint, no Prettier. `.editorconfig` rules: 2 spaces, single quotes.
+- ESLint (`angular-eslint`) + Prettier. `npm run lint` is a CI step; `eslint-config-prettier`
+  keeps ESLint out of formatting. Prettier settings live in `.prettierrc` and match
+  `.editorconfig`: 2 spaces, single quotes.
 - Everything committed to this repo is written in English — code, comments and docs.
 
 ## Account and identity (do not change)
@@ -101,4 +105,4 @@ responding.
 - `AppComponent` has no `ngOnDestroy`: Lenis and the ScrollTriggers are never destroyed.
   Irrelevant today (the component lives as long as the page does); it matters the moment
   routes appear.
-- No ESLint. No e2e.
+- No e2e.

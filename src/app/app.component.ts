@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, AfterViewInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -41,7 +41,7 @@ interface Project {
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements AfterViewInit {
   title = 'Marco Pérez - Portfolio';
@@ -55,11 +55,11 @@ export class AppComponent implements AfterViewInit {
     {
       label: 'Frontend',
       items: ['angular', 'vuedotjs', 'nuxt', 'react', 'nextdotjs', 'typescript'],
-      extras: ['NgRx', 'RxJS']
+      extras: ['NgRx', 'RxJS'],
     },
     { label: 'Backend', items: ['nestjs', 'nodedotjs', 'springboot', 'go'] },
     { label: 'Data & cloud', items: ['mysql', 'mongodb', 'amazonwebservices', 'docker'] },
-    { label: 'Quality', items: ['playwright', 'jest'], extras: ['WCAG'] }
+    { label: 'Quality', items: ['playwright', 'jest'], extras: ['WCAG'] },
   ];
 
   projects: Project[] = [
@@ -77,7 +77,7 @@ export class AppComponent implements AfterViewInit {
         'Payroll with QR-signed payslips and live integrations',
         'Savings fund: simulator, amortization schedules, approvals',
         'Advances and loans, with limits configurable per tenant',
-        'Legacy pages embedded and authenticated inside the new portal'
+        'Legacy pages embedded and authenticated inside the new portal',
       ],
       detail:
         'Every module ships front and back in the same pull request: a Nuxt 3 screen, an api-v2 ' +
@@ -86,7 +86,7 @@ export class AppComponent implements AfterViewInit {
         'embedded and authenticated through session tokens, so the platform migrates piece by ' +
         'piece while production stays up.',
       diagram: 'coexistence',
-      tech: ['nuxt', 'vuedotjs', 'nestjs', 'mysql', 'amazonwebservices', 'typescript']
+      tech: ['nuxt', 'vuedotjs', 'nestjs', 'mysql', 'amazonwebservices', 'typescript'],
     },
     {
       sector: 'Genomics research',
@@ -101,7 +101,7 @@ export class AppComponent implements AfterViewInit {
       highlights: [
         'Multipart S3 uploads that resume instead of starting over',
         'Progress dashboard and smoke tests for every migration run',
-        'Normalization rules the lab depends on every day'
+        'Normalization rules the lab depends on every day',
       ],
       detail:
         'Reference genomes go to S3 in parts, and an interrupted transfer picks up where it ' +
@@ -115,10 +115,10 @@ export class AppComponent implements AfterViewInit {
         { name: 'manifest', note: 'Build the copy plan, path by path.' },
         { name: 'copy', note: 'Copy folders in parallel, retrying what fails.' },
         { name: 'rewrite', note: 'Repoint the MongoDB paths, scoped by project.' },
-        { name: 'audit', note: 'Compare both buckets in both directions.' }
+        { name: 'audit', note: 'Compare both buckets in both directions.' },
       ],
       stagesLabel: 'Migration pipeline',
-      tech: ['nextdotjs', 'react', 'redux', 'nodedotjs', 'mongodb', 'amazonwebservices']
+      tech: ['nextdotjs', 'react', 'redux', 'nodedotjs', 'mongodb', 'amazonwebservices'],
     },
     {
       sector: 'Education technology',
@@ -133,13 +133,13 @@ export class AppComponent implements AfterViewInit {
       highlights: [
         'Semantic HTML and keyboard paths through every flow',
         'Screen reader support, audited continuously',
-        'Go services behind the front end'
+        'Go services behind the front end',
       ],
       detail:
         'Accessibility here is a build-time constraint, not a release checklist: semantic ' +
         'structure, keyboard paths through every flow, screen reader support, checked as the ' +
         'work happens. Unit tests in Jasmine and Karma, end-to-end coverage in Playwright.',
-      tech: ['angular', 'go', 'playwright', 'typescript']
+      tech: ['angular', 'go', 'playwright', 'typescript'],
     },
     {
       sector: 'Banking',
@@ -153,7 +153,7 @@ export class AppComponent implements AfterViewInit {
       highlights: [
         'Micro frontend platform over Spring Boot services',
         'Testing standard set across front and back',
-        'Code reviews, mentoring, and the technical interview process'
+        'Code reviews, mentoring, and the technical interview process',
       ],
       detail:
         'Independent teams were blocked on one shared release train. A micro frontend ' +
@@ -161,7 +161,7 @@ export class AppComponent implements AfterViewInit {
         'the testing standard the team adopted, regular code reviews, and the technical ' +
         'interview process it hired with.',
       diagram: 'releases',
-      tech: ['angular', 'springboot', 'jest', 'typescript']
+      tech: ['angular', 'springboot', 'jest', 'typescript'],
     },
     {
       sector: 'Invoicing',
@@ -174,17 +174,19 @@ export class AppComponent implements AfterViewInit {
         'running afterwards.',
       highlights: [
         'Angular front end over a Django back end',
-        'Training sessions for the staff mid-migration'
+        'Training sessions for the staff mid-migration',
       ],
       detail:
         'The migration itself was the smaller half. The system was maintained by people who had ' +
         'only ever worked in the legacy stack, so the Angular training ran alongside the ' +
         'rewrite — which is what actually made it stick.',
-      tech: ['angular', 'django', 'python']
-    }
+      tech: ['angular', 'django', 'python'],
+    },
   ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  private readonly platformId = inject(PLATFORM_ID);
+
+  constructor() {
     gsap.registerPlugin(ScrollTrigger, SplitText);
   }
 
@@ -232,7 +234,7 @@ export class AppComponent implements AfterViewInit {
       yPercent: 40,
       opacity: 0,
       stagger: 0.09,
-      ease: 'power3.out'
+      ease: 'power3.out',
     });
 
     gsap.from('.hero-lede, .hero-actions, .hero-eyebrow', {
@@ -241,7 +243,7 @@ export class AppComponent implements AfterViewInit {
       opacity: 0,
       stagger: 0.08,
       delay: 0.35,
-      ease: 'power2.out'
+      ease: 'power2.out',
     });
 
     // Sections rise as they enter. Kept on .reveal — initAnimations selects by class.
@@ -251,7 +253,7 @@ export class AppComponent implements AfterViewInit {
         y: 28,
         opacity: 0,
         duration: 0.8,
-        ease: 'power3.out'
+        ease: 'power3.out',
       });
     });
 
@@ -263,7 +265,7 @@ export class AppComponent implements AfterViewInit {
         y: 8,
         duration: 0.5,
         stagger: 0.09,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
     });
 
@@ -276,7 +278,7 @@ export class AppComponent implements AfterViewInit {
           transformOrigin: 'left center',
           duration: 0.5,
           stagger: 0.12,
-          ease: 'power2.out'
+          ease: 'power2.out',
         })
         // Opacity only, deliberately. Animating y here leaves an inline transform on each
         // stage name, and a transformed element becomes the containing block for its
@@ -285,7 +287,7 @@ export class AppComponent implements AfterViewInit {
         .from(
           strip.querySelectorAll('.stage-name'),
           { opacity: 0, duration: 0.4, stagger: 0.12, ease: 'power2.out' },
-          0.1
+          0.1,
         );
     });
   }

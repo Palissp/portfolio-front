@@ -19,6 +19,7 @@ npm start          # http://localhost:4200
 ## Build & test
 
 ```bash
+npm run lint       # ESLint (angular-eslint)
 npm run build      # production bundle → dist/portfolio-front/browser
 npm run test:ci    # Karma + Jasmine, headless, single run
 npm test           # same, in watch mode
@@ -41,7 +42,7 @@ service on Cloud Run (project `portfolio-435305`, region `us-central1`). The bui
 config lives in GCP, not in this repo. The domain is hardcoded in the
 `src/index.html` meta tags, because crawlers need absolute URLs for `og:image`.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs tests, the production build and a
+GitHub Actions (`.github/workflows/ci.yml`) runs lint, tests, the production build and a
 `docker build` on every pull request — it does not deploy, it just stops a broken
 build from reaching `main`.
 
