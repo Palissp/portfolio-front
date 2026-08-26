@@ -24,7 +24,8 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelectorAll('.project-card').length)
-      .toBe(fixture.componentInstance.projects.length);
+    expect(compiled.querySelectorAll('.project-card').length).toBe(
+      fixture.componentInstance.projects.length,
+    );
   });
 });

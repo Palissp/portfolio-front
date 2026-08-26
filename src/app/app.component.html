@@ -16,7 +16,7 @@
     <section class="hero container">
       <p class="hero-eyebrow mono">Independent · Ecuador · Remote</p>
       <h1 class="hero-title">
-        Full-stack engineer for systems<br>
+        Full-stack engineer for systems<br />
         that already have users.
       </h1>
       <p class="hero-lede">
@@ -39,18 +39,18 @@
       </div>
       <div class="about-grid">
         <figure class="portrait">
-          <img src="marco-perez.jpg" alt="Marco Pérez" width="627" height="800" loading="lazy">
+          <img src="marco-perez.jpg" alt="Marco Pérez" width="627" height="800" loading="lazy" />
         </figure>
         <div class="about-text">
           <p class="lede">
-            I'm an independent full-stack engineer. I like taking on the whole stack, in
-            domains where understanding the rules and the business matters as much as the code.
+            I'm an independent full-stack engineer. I like taking on the whole stack, in domains
+            where understanding the rules and the business matters as much as the code.
           </p>
           <p>
-            Almost everything I've built has gone into systems that already had users — the kind
-            you can't take offline while you improve them. That made me a generalist on purpose.
-            A feature isn't finished until the screen, the API and the database agree, so I'd
-            rather own all three than hand off at the boundary.
+            Almost everything I've built has gone into systems that already had users — the kind you
+            can't take offline while you improve them. That made me a generalist on purpose. A
+            feature isn't finished until the screen, the API and the database agree, so I'd rather
+            own all three than hand off at the boundary.
           </p>
           <p>
             It also means I spend real time on the business itself: payroll rules, lab protocols,
@@ -58,8 +58,8 @@
             later.
           </p>
           <p class="about-place">
-            Based in Ecuador, working remotely with teams across the US, Colombia and Uruguay.
-            Open to relocation.
+            Based in Ecuador, working remotely with teams across the US, Colombia and Uruguay. Open
+            to relocation.
           </p>
         </div>
         <div class="skills">
@@ -91,7 +91,9 @@
     <section id="work" class="projects container reveal">
       <div class="section-head">
         <h2 class="section-title">Selected work</h2>
-        <p class="section-note">Client names are under NDA, so here's what the work actually was.</p>
+        <p class="section-note">
+          Client names are under NDA, so here's what the work actually was.
+        </p>
       </div>
       <div class="projects-list">
         @for (project of projects; track project.title) {
@@ -143,20 +145,32 @@
                 @case ('coexistence') {
                   <figure class="diagram">
                     <figcaption class="mono">How the migration ships</figcaption>
-                    <svg viewBox="0 0 560 150" role="img"
-                         aria-label="The new portal keeps legacy pages embedded inside it, and both authenticate against the same api-v2 service through one session token.">
+                    <svg
+                      viewBox="0 0 560 150"
+                      role="img"
+                      aria-label="The new portal keeps legacy pages embedded inside it, and both authenticate against the same api-v2 service through one session token."
+                    >
                       <g data-part>
                         <rect class="box" x="1" y="26" width="260" height="104" rx="4"></rect>
                         <text x="14" y="18">NEW PORTAL · NUXT 3</text>
                       </g>
                       <g data-part>
-                        <rect class="box box-dashed" x="22" y="56" width="218" height="56" rx="3"></rect>
+                        <rect
+                          class="box box-dashed"
+                          x="22"
+                          y="56"
+                          width="218"
+                          height="56"
+                          rx="3"
+                        ></rect>
                         <text x="38" y="89">legacy page, embedded</text>
                       </g>
                       <g data-part>
                         <line class="link" x1="261" y1="78" x2="388" y2="78"></line>
                         <path class="link" d="M382 73l7 5-7 5"></path>
-                        <text class="link-label" x="325" y="64" text-anchor="middle">session token</text>
+                        <text class="link-label" x="325" y="64" text-anchor="middle">
+                          session token
+                        </text>
                       </g>
                       <g data-part>
                         <rect class="box" x="396" y="50" width="162" height="56" rx="4"></rect>
@@ -168,8 +182,11 @@
                 @case ('releases') {
                   <figure class="diagram">
                     <figcaption class="mono">Release cadence, before and after</figcaption>
-                    <svg viewBox="0 0 560 168" role="img"
-                         aria-label="Before, three teams merged into a single release train and shipped once. After, each team ships on its own.">
+                    <svg
+                      viewBox="0 0 560 168"
+                      role="img"
+                      aria-label="Before, three teams merged into a single release train and shipped once. After, each team ships on its own."
+                    >
                       <g data-part>
                         <text x="0" y="14">BEFORE</text>
                         <line class="link" x1="56" y1="30" x2="262" y2="30"></line>
