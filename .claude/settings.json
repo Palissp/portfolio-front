@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); case \" $cmd\" in *\" gh \"*|*\" gh\") acct=$(grep -E '^[[:space:]]+user:' \"$HOME/.config/gh/hosts.yml\" 2>/dev/null | tail -1 | awk '{print $2}'); [ \"$acct\" = \"Palissp\" ] || { echo \"BLOCKED: the active gh account is '${acct:-unknown}'; this repo is personal (Palissp). Run: gh auth switch --user Palissp\" >&2; exit 2; };; esac; exit 0"
+            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); case \"$cmd\" in *\"auth switch\"*|*\"auth login\"*|*\"auth status\"*) exit 0;; esac; case \" $cmd\" in *\" gh \"*|*\" gh\") acct=$(grep -E '^[[:space:]]+user:' \"${GH_CONFIG_DIR:-$HOME/.config/gh}/hosts.yml\" 2>/dev/null | tail -1 | awk '{print $2}'); [ \"$acct\" = \"Palissp\" ] || { echo \"BLOCKED: the active gh account is '${acct:-unknown}'; this repo is personal (Palissp). Run: gh auth switch --user Palissp\" >&2; exit 2; };; esac; exit 0"
           }
         ]
       }

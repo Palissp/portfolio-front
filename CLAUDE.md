@@ -78,7 +78,15 @@ responding.
   `user.name = Palissp` / `user.email = marco.perezj96@gmail.com`.
 - Push credential pinned to `Palissp` (`credential.https://github.com.username`).
 - The active `gh` account must be `Palissp`. If it is not: `gh auth switch --user Palissp`.
-  A hook in `.claude/settings.json` blocks any `gh` command when another account is active.
+  A hook in `.claude/settings.json` blocks any `gh` command when another account is
+  active. `auth` subcommands pass through, so the switch above is never blocked by it.
+- `gh` reads its account from a per-repo config directory, not from one global setting.
+  A block in `~/.zshenv` exports `GH_CONFIG_DIR=~/.config/gh-palissp` whenever the
+  origin remote belongs to `Palissp`, and unsets it everywhere else — so this repo is
+  always personal and work repos keep the default config. That block lives outside the
+  repo; if you clone this on another machine, it has to be set up again. The tokens
+  themselves are in the macOS keychain and are shared across config directories, so a
+  new config dir needs no re-authentication.
 - **Never** use the `marcoperez-twiins` account, or any work account, in this repo.
 
 ## Working rules
