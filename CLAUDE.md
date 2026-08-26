@@ -61,6 +61,24 @@ Two separate systems, and only one of them deploys:
 
 Practical consequence: **push to `main` = deploy to production**. There is no staging.
 
+## Monitoring
+
+Also GCP-side only, nothing of it lives in this repo (project `portfolio-435305`,
+Cloud Monitoring):
+
+- Uptime check `itsmarco.dev is up` — HTTPS GET `https://itsmarco.dev/`, expects 200,
+  every 5 min from all 6 regions.
+- Alert policy `itsmarco.dev is down` — fires when 2+ regions fail, notifies the email
+  channel `Portfolio owner (email)`.
+- Alert policy `Billing changed on portfolio-435305` — log-based, matches the
+  `UpdateProjectBillingInfo` audit entry, i.e. billing being detached from the project.
+
+Gap worth knowing: closing or suspending the **billing account** is only written to the
+billing-account audit log, and log-based alert policies scan only logs that originate in
+their own project — so that specific event is invisible here. It also suspends the
+project, which stops the uptime check itself. The uptime alert covers every other cause
+of downtime; a genuinely out-of-band monitor (a cron outside GCP) would be the fix.
+
 `EXPOSE 80` in the Dockerfile is not decorative: Cloud Run reads the container port
 from it. Changing it means changing the service port in GCP too, or the deploy stops
 responding.
