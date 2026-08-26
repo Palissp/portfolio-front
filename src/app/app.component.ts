@@ -278,9 +278,13 @@ export class AppComponent implements AfterViewInit {
           stagger: 0.12,
           ease: 'power2.out'
         })
+        // Opacity only, deliberately. Animating y here leaves an inline transform on each
+        // stage name, and a transformed element becomes the containing block for its
+        // absolutely positioned descendants — which would drop the note onto the name
+        // instead of into the gutter below the strip. The rules already carry the motion.
         .from(
           strip.querySelectorAll('.stage-name'),
-          { opacity: 0, y: 6, duration: 0.4, stagger: 0.12, ease: 'power2.out' },
+          { opacity: 0, duration: 0.4, stagger: 0.12, ease: 'power2.out' },
           0.1
         );
     });
