@@ -1,0 +1,19 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # @angular/* release in lockstep, and zone.js is pinned to the Angular
+      # release — one PR for the whole set, not eight.
+      angular:
+        patterns:
+          - "@angular/*"
+          - "zone.js"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
