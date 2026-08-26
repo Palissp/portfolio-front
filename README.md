@@ -65,3 +65,12 @@ src/
 ```
 
 See [CLAUDE.md](./CLAUDE.md) for architecture notes and conventions.
+
+## License
+
+The code is MIT licensed — see [LICENSE](./LICENSE). Borrow the scroll triggers.
+
+The content is not: the writing, the portrait in `public/marco-perez.jpg`, the
+project descriptions and the name and brand mark are all rights reserved. The tech
+icons in `src/app/tech-icons.ts` come from [Simple Icons](https://simpleicons.org/)
+and are CC0.
