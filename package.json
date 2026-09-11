@@ -15,7 +15,7 @@
   "dependencies": {
     "@angular/common": "^20.3.13",
     "@angular/compiler": "^20.3.13",
-    "@angular/core": "^20.3.13",
+    "@angular/core": "^20.3.28",
     "@angular/platform-browser": "^20.3.13",
     "@angular/router": "^20.3.13",
     "gsap": "^3.13.0",
